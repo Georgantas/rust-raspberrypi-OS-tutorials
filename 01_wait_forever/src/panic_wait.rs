@@ -6,6 +6,7 @@
 
 use core::panic::PanicInfo;
 
+// #[panic_handler] is used to define the behavior of panic! in #![no_std] applications.
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     unimplemented!()
