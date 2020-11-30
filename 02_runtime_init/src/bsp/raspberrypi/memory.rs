@@ -28,9 +28,11 @@ extern "Rust" {
 /// - The linker-provided addresses must be u64 aligned.
 pub fn bss_range_inclusive() -> RangeInclusive<*mut u64> {
     let range;
+
     unsafe {
         range = RangeInclusive::new(__bss_start.get(), __bss_end_inclusive.get());
     }
+
     assert!(!range.is_empty());
 
     range

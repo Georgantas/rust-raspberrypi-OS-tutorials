@@ -26,6 +26,7 @@ unsafe fn zero_bss() {
 
 /// Equivalent to `crt0` or `c0` code in C/C++ world. Clears the `bss` section, then jumps to kernel
 /// init code.
+/// https://en.wikipedia.org/wiki/Crt0
 ///
 /// # Safety
 ///

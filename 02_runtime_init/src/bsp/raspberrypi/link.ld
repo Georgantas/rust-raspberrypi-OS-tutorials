@@ -26,6 +26,8 @@ SECTIONS
     /* Section is zeroed in u64 chunks, align start and end to 8 bytes */
     .bss ALIGN(8):
     {
+        /* Defines a symbol at the start of the .bss section */
+        /* See "symbols" section here: https://wiki.osdev.org/Linker_Scripts */
         __bss_start = .;
         *(.bss*);
         . = ALIGN(8);
