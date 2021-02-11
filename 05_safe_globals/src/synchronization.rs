@@ -72,6 +72,10 @@ impl<T> interface::Mutex for NullLock<T> {
         // mutable reference will ever only be given out once at a time.
         let data = unsafe { &mut *self.data.get() };
 
+        // UnsafeCell is simple: you put some data in it, and it returns a mutable reference to it
+        // through .get(). This is considered unsafe. All other types that allow internal
+        // mutability, such as Cell<T> and RefCell<T>, use UnsafeCell to wrap their internal data.
+
         f(data)
     }
 }
