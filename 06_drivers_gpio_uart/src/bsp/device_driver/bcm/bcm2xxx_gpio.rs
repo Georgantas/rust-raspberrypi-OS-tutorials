@@ -20,7 +20,7 @@ use register::{mmio::*, register_bitfields, register_structs};
 // - https://github.com/raspberrypi/documentation/files/1888662/BCM2837-ARM-Peripherals.-.Revised.-.V2-1.pdf
 // - https://datasheets.raspberrypi.org/bcm2711/bcm2711-peripherals.pdf
 register_bitfields! {
-    u32,
+    u32, // size of every definition below
 
     /// GPIO Function Select 1
     GPFSEL1 [
@@ -87,6 +87,8 @@ register_bitfields! {
     ]
 }
 
+// check page 66 of bcm2711 doc
+// or page 90-91 of the bcm2837 doc for these mappings
 register_structs! {
     #[allow(non_snake_case)]
     RegisterBlock {
@@ -142,7 +144,7 @@ impl GPIOInner {
         use crate::cpu;
 
         // Make an educated guess for a good delay value (Sequence described in the BCM2837
-        // peripherals PDF).
+        // peripherals PDF (see page 101)).
         //
         // - According to Wikipedia, the fastest Pi3 clocks around 1.4 GHz.
         // - The Linux 2837 GPIO driver waits 1 µs between the steps.
@@ -151,6 +153,8 @@ impl GPIOInner {
         // would the CPU be clocked at 2 GHz.
         const DELAY: usize = 2000;
 
+        // The  GPIO  Pull-up/down  Register  controls  the  actuation of the internal
+        // pull-up/down control line to ALL the GPIO pins. (see page 100 of bcm2837 doc)
         self.registers.GPPUD.write(GPPUD::PUD::Off);
         cpu::spin_for_cycles(DELAY);
 
@@ -178,6 +182,7 @@ impl GPIOInner {
     /// RX to pin 15
     pub fn map_pl011_uart(&mut self) {
         // Select the UART on pins 14 and 15.
+        // (which is UART, see pages 76 and 77 of the bcm2711 documentation)
         self.registers
             .GPFSEL1
             .modify(GPFSEL1::FSEL15::AltFunc0 + GPFSEL1::FSEL14::AltFunc0);

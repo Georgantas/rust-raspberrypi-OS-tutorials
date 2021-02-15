@@ -12,7 +12,7 @@ use core::{marker::PhantomData, ops};
 
 pub struct MMIODerefWrapper<T> {
     start_addr: usize,
-    phantom: PhantomData<fn() -> T>,
+    phantom: PhantomData<fn() -> T>, // if we try removing this we get "unused param T" error
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -29,6 +29,8 @@ impl<T> MMIODerefWrapper<T> {
     }
 }
 
+// basically, we're overloading the "." operation here
+// see it in action in the "disable_pud_14_15_bcm2837" function
 impl<T> ops::Deref for MMIODerefWrapper<T> {
     type Target = T;
 
